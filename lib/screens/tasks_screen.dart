@@ -1,30 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:todo/widgets/task_list.dart';
 import 'add_task_screen.dart';
-import 'package:todo/models/task.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/models/task_data.dart';
 
-class TasksScreen extends StatefulWidget {
-  @override
-  _TasksScreenState createState() => _TasksScreenState();
-}
-
-class _TasksScreenState extends State<TasksScreen> {
-  void updateTaskState(bool checkboxState, int index) {
-    setState(() {
-      Provider.of<TaskData>(context).tasks[index].toggleDone();
-    });
-  }
-
-  void updateTaskList(BuildContext context, String newTask) {
-    print(newTask);
-    setState(() {
-      Provider.of<TaskData>(context).tasks.add(Task(name: newTask));
-    });
-    Navigator.pop(context);
-  }
-
+class TasksScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,11 +13,7 @@ class _TasksScreenState extends State<TasksScreen> {
         onPressed: () {
           showModalBottomSheet(
             context: context,
-            builder: (context) => AddTaskScreen(
-              addTaskCallback: (newValue) {
-                updateTaskList(context, newValue);
-              },
-            ),
+            builder: (context) => AddTaskScreen(),
           );
         },
         backgroundColor: Colors.lightBlueAccent,
@@ -75,7 +51,7 @@ class _TasksScreenState extends State<TasksScreen> {
                   ),
                 ),
                 Text(
-                  '${Provider.of<TaskData>(context).tasks.length} Tasks',
+                  '${Provider.of<TaskData>(context).taskCount} Tasks',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18,
@@ -93,10 +69,7 @@ class _TasksScreenState extends State<TasksScreen> {
                   topRight: Radius.circular(20.0),
                 ),
               ),
-              child: TasksList(
-                tasks: Provider.of<TaskData>(context).tasks,
-                taskListCallback: updateTaskState,
-              ),
+              child: TasksList(),
             ),
           ),
         ],
