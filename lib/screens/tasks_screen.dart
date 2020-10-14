@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:todo/widgets/task_list.dart';
 import 'add_task_screen.dart';
 import 'package:todo/models/task.dart';
+import 'package:provider/provider.dart';
+import 'package:todo/models/task_data.dart';
 
 class TasksScreen extends StatefulWidget {
   @override
@@ -9,23 +11,16 @@ class TasksScreen extends StatefulWidget {
 }
 
 class _TasksScreenState extends State<TasksScreen> {
-  List<Task> tasks = [
-    Task(name: 'Buy steak'),
-    Task(name: 'Buy milk'),
-    Task(name: 'Buy eggs'),
-    Task(name: 'Buy bread')
-  ];
-
   void updateTaskState(bool checkboxState, int index) {
     setState(() {
-      tasks[index].toggleDone();
+      Provider.of<TaskData>(context).tasks[index].toggleDone();
     });
   }
 
   void updateTaskList(BuildContext context, String newTask) {
     print(newTask);
     setState(() {
-      tasks.add(Task(name: newTask));
+      Provider.of<TaskData>(context).tasks.add(Task(name: newTask));
     });
     Navigator.pop(context);
   }
@@ -80,7 +75,7 @@ class _TasksScreenState extends State<TasksScreen> {
                   ),
                 ),
                 Text(
-                  '${tasks.length} Tasks',
+                  '${Provider.of<TaskData>(context).tasks.length} Tasks',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18,
@@ -99,7 +94,7 @@ class _TasksScreenState extends State<TasksScreen> {
                 ),
               ),
               child: TasksList(
-                tasks: tasks,
+                tasks: Provider.of<TaskData>(context).tasks,
                 taskListCallback: updateTaskState,
               ),
             ),
